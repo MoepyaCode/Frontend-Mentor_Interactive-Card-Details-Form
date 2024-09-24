@@ -1,6 +1,28 @@
 /* Add Google fonts below */
-
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+    .heading-xl {
+        @apply font-medium text-[28px] tracking-[3.42px]
+    }
+
+    .heading-l {
+        @apply font-medium text-[18px]
+    }
+
+    .body-l {
+        @apply font-medium text-[14px] tracking-[2px]
+    }
+
+    .body-m {
+        @apply font-medium text-[12px] tracking-[2px]
+    }
+
+    .body-s {
+        @apply font-medium text-[12px]
+    }
+}

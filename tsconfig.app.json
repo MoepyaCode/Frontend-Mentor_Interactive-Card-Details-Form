@@ -16,6 +16,17 @@
     "moduleDetection": "force",
     "noEmit": true,
     "jsx": "react-jsx",
+    "baseUrl": ".",
+    "paths": {
+      "@app-assets": ["src/assets"],
+      "@app-assets/*": ["src/assets/*"],
+      "@app-components": ["src/components"],
+      "@app-components/*": ["src/components/*"],
+      "@app-hooks": ["src/hooks"],
+      "@app-hooks/*": ["src/hooks/*"],
+      "@app-store": ["src/store"],
+      "@app-store/*": ["src/store/*"],
+    },
 
     /* Linting */
     "strict": true,
