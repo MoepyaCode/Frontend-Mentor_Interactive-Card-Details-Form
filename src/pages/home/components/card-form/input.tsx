@@ -37,11 +37,11 @@ export const Input = forwardRef<HTMLInputElement, Props>(function Input(props, r
     switch (inputChange && Object.keys(inputChange)[0]) {
       case 'cardHolder':
         setValue(cardHolder)
-        cardHolder && dispatch(setCardHolder(cardHolder))
+        dispatch(setCardHolder(cardHolder))
         break
       case 'cardNumber':
         setValue(cardNumber)
-        cardNumber && dispatch(setCardNumber(cardNumber))
+        dispatch(setCardNumber(cardNumber))
         break
       case 'month':
       case 'year':

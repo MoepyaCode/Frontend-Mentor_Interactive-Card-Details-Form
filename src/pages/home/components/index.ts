@@ -1,2 +1,2 @@
-export * from './card-wrapper'
+export * from './output'
 export * from './card-form'

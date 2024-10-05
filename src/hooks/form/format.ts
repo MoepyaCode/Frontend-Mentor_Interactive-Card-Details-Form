@@ -24,9 +24,11 @@ export function useFormFormat() {
                 cardHolder: formatCardHolder(cardHolder)
             }
 
-            if (cardNumber || cardNumber === '') currentState = {
-                ...currentState,
-                cardNumber: formatCardNumber(cardNumber?.toString())
+            if (cardNumber || cardNumber === '') {
+                currentState = {
+                    ...currentState,
+                    cardNumber: formatCardNumber(cardNumber?.toString())
+                }
             }
 
             const undefinedObject = (value: number | string | undefined) => ({
@@ -64,7 +66,7 @@ function formatCardHolder(cardHolder: string | undefined) {
 }
 
 function formatCardNumber(cardNumber: string | undefined) {
-    if (cardNumber === undefined) return ''
+    if (cardNumber === '' || isUndefined(cardNumber)) return ''
     return cardNumber.replace(/\D/g, '').replace(/(\d{4})(?=\d)/g, '$1 ')
 }
 

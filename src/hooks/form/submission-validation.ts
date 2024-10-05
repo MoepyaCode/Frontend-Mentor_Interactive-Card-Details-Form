@@ -52,7 +52,7 @@ function validateExpiration(expiration: CardStateI['expiration']) {
     const expirationYear = parseInt(`20${year}`)
 
     const validateMonth = (month: number) => {
-        if (_.isEmpty(month)) return isError
+        if (_.isUndefined(month)) return isError
 
         if (month < 1 || month > 12) return {
             message: 'Invalid month',
@@ -63,7 +63,7 @@ function validateExpiration(expiration: CardStateI['expiration']) {
     }
 
     const validateYear = (year: number) => {
-        if (_.isEmpty(year)) return isError
+        if (_.isUndefined(year)) return isError
 
         if (expirationYear < currentDate.getFullYear()) return {
             message: 'Invalid year',
@@ -72,6 +72,11 @@ function validateExpiration(expiration: CardStateI['expiration']) {
 
         return noError
     }
+
+    console.log({
+        month: validateMonth(month),
+        year: validateYear(year)
+    })
 
     return {
         month: validateMonth(month),
@@ -82,7 +87,7 @@ function validateExpiration(expiration: CardStateI['expiration']) {
 function validateCvc(cvc: CardStateI['cvc']): ErrorI {
     if (_.isEmpty(cvc)) return isError
 
-    if(cvc.length !== 3) return {
+    if (cvc.length !== 3) return {
         message: 'Invalid card cvc',
         hasError: true
     }

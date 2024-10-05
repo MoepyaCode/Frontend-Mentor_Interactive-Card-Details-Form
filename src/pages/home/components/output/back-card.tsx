@@ -1,7 +1,6 @@
 import { assets } from '@app-assets'
 import { Wrapper } from '@app-components'
-import _, { isUndefined } from 'lodash'
-import React from 'react'
+import _ from 'lodash'
 
 type Props = {
     [K in keyof Pick<CardStateI, 'cvc'>]: CardStateI[K]
