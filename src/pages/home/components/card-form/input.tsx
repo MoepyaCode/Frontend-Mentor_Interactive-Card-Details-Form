@@ -1,7 +1,7 @@
 import { Wrapper } from '@app-components'
 import React, { ChangeEvent, forwardRef } from 'react'
 import { setCardHolder, setCardNumber, setCvc, setExpiration } from '@app-store/features/card'
-import { useAppDispatch, useFormFormat } from '@app-hooks'
+import { useAppDispatch, useAppSelector, useFormFormat } from '@app-hooks'
 
 type Props = {
   title?: string
@@ -15,10 +15,11 @@ type Props = {
 }
 
 export const Input = forwardRef<HTMLInputElement, Props>(function Input(props, ref) {
-  const [value, setValue] = React.useState('')
+  const [value, setValue] = React.useState<number | string>('')
   const { details, format } = useFormFormat()
   const [inputChange, setInputChange] = React.useState<FormFormatI>()
   const dispatch = useAppDispatch()
+  const card = useAppSelector(state => state.card)
 
   const onChange = (event: ChangeEvent) => {
     const target = event.target as HTMLInputElement
@@ -26,7 +27,7 @@ export const Input = forwardRef<HTMLInputElement, Props>(function Input(props, r
     if (target.value.length > props?.charsLimit && props.charsLimit !== -1) return setValue(value)
 
     setValue(target.value)
-    format({ [target.name]: target.value })
+    format({ [target.name]: target.value }, card)
     setInputChange({ [target.name]: target.value })
   }
 
@@ -44,12 +45,12 @@ export const Input = forwardRef<HTMLInputElement, Props>(function Input(props, r
         break
       case 'month':
       case 'year':
-        const { month, year } = inputChange as FormFormatI
-        month ? setValue(month.toString()) : year && setValue(year.toString())
+        console.log({ expiration })
         dispatch(setExpiration(expiration))
         break
       case 'cvc':
-        cvc && dispatch(setCvc(cvc))
+        setValue(cvc)
+        dispatch(setCvc(cvc))
         break
     }
 

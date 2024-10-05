@@ -1,4 +1,5 @@
 import { formDetails } from "@app-utils";
+import { isUndefined } from "lodash";
 import React from "react";
 
 /**
@@ -7,50 +8,55 @@ import React from "react";
 export function useFormFormat() {
     const [details, setDetails] = React.useState<CardStateI>(formDetails)
 
-    const format = (currentDetails: FormFormatI) => {
-        setDetails(state => {
-            let currentState = { ...state }
+    const format = (detailChange: FormFormatI, prevDetails: CardStateI) => {
+        setDetails(() => {
+            let currentState = { ...prevDetails }
             const {
                 cardHolder,
                 cardNumber,
                 month,
                 year,
                 cvc
-            } = currentDetails
+            } = detailChange
 
-            if (cardHolder || cardHolder === '') {
-                currentState = {
-                    ...currentState,
-                    cardHolder: formatCardHolder(cardHolder)
-                }
+            if (cardHolder || cardHolder === '') currentState = {
+                ...currentState,
+                cardHolder: formatCardHolder(cardHolder)
             }
 
-            if (cardNumber || cardNumber === '') {
-                currentState = {
-                    ...currentState,
-                    cardNumber: formatCardNumber(cardNumber?.toString())
-                }
+            if (cardNumber || cardNumber === '') currentState = {
+                ...currentState,
+                cardNumber: formatCardNumber(cardNumber?.toString())
             }
 
-            if (month || year) {
-                currentState = {
-                    ...currentState,
-                    expiration: formatExpirationDate(month, year, currentState.expiration)
-                }
+            const undefinedObject = (value: number | string | undefined) => ({
+                value: value ? value.toString() : undefined,
+                isUndefined: isUndefined(value)
+            })
+
+            if ((month || year) || (isUndefined(month) || isUndefined(year))) currentState = {
+                ...currentState,
+                expiration: formatExpirationDate(
+                    undefinedObject(month),
+                    undefinedObject(year),
+                    currentState.expiration,
+                    detailChange
+                )
             }
 
-            if (cvc) {
-                currentState = {
-                    ...currentState,
-                    cvc
-                }
+            if (cvc || cvc === '') currentState = {
+                ...currentState,
+                cvc: formatCvc(cvc)
             }
-
             return currentState
         })
     }
+
     return { format, details }
 }
+
+
+
 
 function formatCardHolder(cardHolder: string | undefined) {
     if (cardHolder === undefined) return ''
@@ -62,21 +68,33 @@ function formatCardNumber(cardNumber: string | undefined) {
     return cardNumber.replace(/\D/g, '').replace(/(\d{4})(?=\d)/g, '$1 ')
 }
 
-function formatExpirationDate(month: FormFormatI['month'], year: FormFormatI['year'], prevExpiration: CardStateI['expiration']): ExpirationDateType {
-    let currentExpiration = { ...prevExpiration }
-    if (month) {
-        currentExpiration = {
-            ...currentExpiration,
-            month
-        }
-    }
+type ExpirationCheckType = {
+    value: string | number | undefined
+    isUndefined: boolean
+}
 
-    if (year) {
-        currentExpiration = {
-            ...currentExpiration,
-            year
-        }
+function formatExpirationDate(month: ExpirationCheckType, year: ExpirationCheckType, prevExpiration: CardStateI['expiration'], detailChange: FormFormatI): ExpirationDateType {
+    let currentExpiration = { ...prevExpiration }
+
+    switch (Object.keys(detailChange)[0]) {
+        case 'month':
+            currentExpiration = {
+                ...currentExpiration,
+                month: isUndefined(month.value) ? 0 : parseInt(month.value as string)
+            }
+            break
+        case 'year':
+            currentExpiration = {
+                ...currentExpiration,
+                year: isUndefined(year.value) ? 0 : parseInt(year.value as string)
+            }
+            break
     }
 
     return currentExpiration
+}
+
+function formatCvc(cvc: string | undefined) {
+    if (cvc === undefined) return ''
+    return cvc.replace(/\D/g, '')
 }
