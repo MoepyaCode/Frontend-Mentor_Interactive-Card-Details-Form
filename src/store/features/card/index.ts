@@ -1,4 +1,4 @@
-import { formDetails, validation } from "@app-utils"
+import { expiration, formDetails, validation } from "@app-utils"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 
 const initialState: CardStateValidatedI = {
@@ -24,6 +24,13 @@ const cardSlice = createSlice({
         },
         setValidation(state, action: PayloadAction<ValidationI>) {
             state.validation = action.payload
+        },
+        resetCard(state) {
+            state.cardHolder = ''
+            state.cardNumber = ''
+            state.cvc = ''
+            state.expiration = expiration
+            state.validation = validation
         }
     }
 })
@@ -33,7 +40,8 @@ export const {
     setCardNumber,
     setCvc,
     setExpiration,
-    setValidation
+    setValidation,
+    resetCard
 } = cardSlice.actions
 
 export default cardSlice.reducer

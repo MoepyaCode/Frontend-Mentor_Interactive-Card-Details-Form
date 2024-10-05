@@ -54,7 +54,7 @@ export const Input = forwardRef<HTMLInputElement, Props>(function Input(props, r
         break
     }
 
-  }, [details, inputChange])
+  }, [details, inputChange, dispatch])
 
   return (
     <Wrapper className={`${props.className} flex flex-col gap-[9px]`}>

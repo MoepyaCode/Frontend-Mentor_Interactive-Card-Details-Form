@@ -1,5 +1,5 @@
 import { Wrapper } from '@app-components'
-import React, { FormEvent, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { Input } from './input'
 import { useAppDispatch, useAppSelector, useFormValidation, } from '@app-hooks'
 import _ from 'lodash'
@@ -22,7 +22,7 @@ export function CardForm() {
       dispatch(setValidation(validation))
     }
 
-  }, [validate, card.validation, validation])
+  }, [validate, card.validation, validation, dispatch])
 
 
   return (
