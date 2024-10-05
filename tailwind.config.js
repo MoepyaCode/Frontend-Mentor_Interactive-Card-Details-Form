@@ -18,9 +18,15 @@ export default {
         },
         grey: {
           purpulish: '#8F8694',
-          grey: '#DFDEE0'
+          light: '#DFDEE0'
         },
         red: '#FF5050'
+      },
+      backgroundImage: {
+        'main-mobile': "url('src/assets/images/bg-main-mobile.png')",
+        'main-desktop': "url('src/assets/images/bg-main-desktop.png')",
+        'card-back': "url('src/assets/images/bg-card-back.png')",
+        'card-front': "url('src/assets/images/bg-card-front.png')",
       }
     },
   },

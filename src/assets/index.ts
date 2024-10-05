@@ -1,6 +1,6 @@
 import {images} from './images'
 import {icons} from './icons'
-import logo from './logo.svg'
+import logo from './card-logo.svg'
 
 export const assets = {
     images,

@@ -1,26 +1,42 @@
 
 declare interface ExpirationDateType {
-    month: string;
-    year: string;
+    month: number;
+    year: number;
 }
 
 declare interface CardFormI {
     cardNumber: string;
     cardHolder: string;
-    expiration: ExpirationDateType;
-    cvv: string;
+    month: number;
+    year: number;
+    cvc: string;
 }
 
-declare interface CardStateI extends CardFormI {
+declare type FormFormatI = {
+    [K in keyof CardFormI]?: CardFormI[K]
+}
+
+declare interface CardStateI extends Omit<CardFormI, 'month' | 'year'> {
+    expiration: ExpirationDateType;
+}
+
+declare interface CardStateValidatedI extends CardStateI {
     validation: ValidationI;
 }
 
 declare interface ValidationI {
-    errors: ErrorsType
+    errors: ErrorsI
     isValid: boolean
 }
 
-declare type ErrorsType = Record<keyof CardFormI, ErrorI>
+declare type ErrorsType = Record<keyof Omit<CardStateI, 'expiration'>, ErrorI>
+
+declare interface ErrorsI extends ErrorsType {
+    expiration: {
+        month: ErrorI
+        year: ErrorI
+    }
+}
 
 declare interface ErrorI {
     message: string
@@ -28,7 +44,6 @@ declare interface ErrorI {
 }
 
 declare interface CardValidationHookI {
-    details: CardFormI;
     validation: ValidationI;
-    validateCard: (card: CardFormI) => void;
+    validateCard: (card: CardStateI) => void;
 }

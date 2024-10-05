@@ -1,32 +1,8 @@
+import { formDetails, validation } from "@app-utils"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 
-const expiration: ExpirationDateType = {
-    month: '',
-    year: ''
-}
-
-const error: ErrorI = {
-    message: '',
-    hasError: false
-}
-
-const errors = {
-    cardHolder: error,
-    cardNumber: error,
-    expiration: error,
-    cvv: error
-}
-
-const validation: ValidationI = {
-    errors,
-    isValid: false
-}
-
-const initialState: CardStateI = {
-    cardHolder: '',
-    cardNumber: '',
-    cvv: '',
-    expiration: expiration,
+const initialState: CardStateValidatedI = {
+    ...formDetails,
     validation: validation
 }
 
@@ -43,8 +19,8 @@ const cardSlice = createSlice({
         setExpiration(state, action: PayloadAction<ExpirationDateType>) {
             state.expiration = action.payload
         },
-        setCvv(state, action: PayloadAction<string>) {
-            state.cvv = action.payload
+        setCvc(state, action: PayloadAction<string>) {
+            state.cvc = action.payload
         },
         setValidation(state, action: PayloadAction<ValidationI>) {
             state.validation = action.payload
@@ -55,7 +31,7 @@ const cardSlice = createSlice({
 export const {
     setCardHolder,
     setCardNumber,
-    setCvv,
+    setCvc,
     setExpiration,
     setValidation
 } = cardSlice.actions

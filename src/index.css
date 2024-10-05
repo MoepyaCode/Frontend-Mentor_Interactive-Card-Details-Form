@@ -5,6 +5,16 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+    input[type='number']::-webkit-outer-spin-button,
+    input[type='number']::-webkit-inner-spin-button,
+    input[type='number'] {
+        -webkit-appearance: none;
+        margin: 0;
+        -moz-appearance: textfield !important;
+    }
+}
+
 @layer components {
     .heading-xl {
         @apply font-medium text-[28px] tracking-[3.42px]

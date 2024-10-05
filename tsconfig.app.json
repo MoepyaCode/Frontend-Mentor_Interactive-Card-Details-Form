@@ -26,6 +26,8 @@
       "@app-hooks/*": ["src/hooks/*"],
       "@app-store": ["src/store"],
       "@app-store/*": ["src/store/*"],
+      "@app-utils": ["src/utils"],
+      "@app-utils/*": ["src/utils/*"],
     },
 
     /* Linting */

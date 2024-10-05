@@ -17,6 +17,8 @@ export default defineConfig({
       '@app-hooks/*': resolve(root, 'hooks/*'),
       '@app-store': resolve(root, 'store'),
       '@app-store/*': resolve(root, 'store/*'),
+      '@app-utils': resolve(root, 'utils'),
+      '@app-utils/*': resolve(root, 'utils/*'),
     }
   }
 })
