@@ -1,28 +1,29 @@
 import { Wrapper } from '@app-components'
-import React, { FormEvent } from 'react'
+import React, { FormEvent, useEffect } from 'react'
 import { Input } from './input'
-import { useAppDispatch, useFormFormat } from '@app-hooks'
+import { useAppDispatch, useAppSelector, useFormValidation, } from '@app-hooks'
+import _ from 'lodash'
+import { setValidation } from '@app-store/features/card'
 
 export function CardForm() {
-  const { details, format } = useFormFormat()
-  const [inputChange, setInputChange] = React.useState<FormFormatI>()
+  const card = useAppSelector(state => state.card)
   const dispatch = useAppDispatch()
+  const { validate, validation } = useFormValidation()
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault()
-    const formData = new FormData(event.target as HTMLFormElement)
-
-    let data = Object.fromEntries(formData.entries()) as unknown as CardFormI
-    const { month, year, ...rest } = data
-    const expiration: ExpirationDateType = {
-      month: month,
-      year: year
-    }
-    const cardState = { ...rest, expiration }
-    format(cardState)
+    console.log('Form Submitted')
+    validate(card)
   }
 
- 
+  useEffect(() => {
+
+    if (!_.isEqual(validation, card.validation)) {
+      dispatch(setValidation(validation))
+    }
+
+  }, [validate, card.validation, validation])
+
 
   return (
     <Wrapper className='flex-grow grid place-items-center'>
@@ -33,6 +34,7 @@ export function CardForm() {
           placeholder='e.g. Jane Appleseed'
           type='text'
           charsLimit={-1}
+          error={validation.errors.cardHolder}
         />
 
         <Input
@@ -41,6 +43,7 @@ export function CardForm() {
           placeholder='e.g. 1234 5678 1234 5678'
           type='text'
           charsLimit={19}
+          error={validation.errors.cardNumber}
         />
 
         {/* Expiration Date & CVC */}
@@ -56,6 +59,7 @@ export function CardForm() {
                 placeholder='MM'
                 type='number'
                 charsLimit={2}
+                hasError={validation.errors.expiration.month.hasError}
                 className='max-w-[72px]'
               />
 
@@ -64,9 +68,14 @@ export function CardForm() {
                 placeholder='YY'
                 type='number'
                 charsLimit={2}
+                hasError={validation.errors.expiration.year.hasError}
                 className='max-w-[72px]'
               />
             </div>
+            {
+              (validation.errors.expiration.month.hasError || validation.errors.expiration.year.hasError)
+              && <p className='body-s text-red mt-2'>{validation.errors.expiration.month.message || validation.errors.expiration.year.message}</p>
+            }
           </Wrapper>
 
           {/* CVC */}
@@ -76,6 +85,7 @@ export function CardForm() {
             placeholder='e.g. 123'
             type='number'
             charsLimit={3}
+            error={validation.errors.cvc}
             className='max-w-[164px]'
           />
         </Wrapper>

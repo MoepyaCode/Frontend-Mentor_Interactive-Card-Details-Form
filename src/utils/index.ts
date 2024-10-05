@@ -1,3 +1,4 @@
+import _ from "lodash"
 
 export const expiration: ExpirationDateType = {
     month: 0,
@@ -7,6 +8,13 @@ export const expiration: ExpirationDateType = {
 export const error: ErrorI = {
     message: '',
     hasError: false
+}
+
+export const noError: ErrorI = _.cloneDeep(error)
+
+export const isError: ErrorI = {
+    message: 'Can’t be blank',
+    hasError: true
 }
 
 export const expirationError = {

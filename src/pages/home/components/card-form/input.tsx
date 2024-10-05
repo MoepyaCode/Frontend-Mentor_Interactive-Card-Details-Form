@@ -10,6 +10,8 @@ type Props = {
   placeholder: string
   className?: string
   charsLimit: number
+  error?: ErrorI
+  hasError?: boolean
 }
 
 export const Input = forwardRef<HTMLInputElement, Props>(function Input(props, ref) {
@@ -17,7 +19,6 @@ export const Input = forwardRef<HTMLInputElement, Props>(function Input(props, r
   const { details, format } = useFormFormat()
   const [inputChange, setInputChange] = React.useState<FormFormatI>()
   const dispatch = useAppDispatch()
-  const error = false
 
   const onChange = (event: ChangeEvent) => {
     const target = event.target as HTMLInputElement
@@ -39,7 +40,7 @@ export const Input = forwardRef<HTMLInputElement, Props>(function Input(props, r
         break
       case 'cardNumber':
         setValue(cardNumber)
-        cardHolder && dispatch(setCardNumber(cardNumber))
+        cardNumber && dispatch(setCardNumber(cardNumber))
         break
       case 'month':
       case 'year':
@@ -59,9 +60,9 @@ export const Input = forwardRef<HTMLInputElement, Props>(function Input(props, r
       <h2 className='body-m text-violet-deep'>{props.title}</h2>
 
       <label className='relative flex' htmlFor={props.name}>
-        <input value={value} onChange={onChange} ref={ref} className={`w-full flex-grow outline-none border ${error ? '' : 'border-grey-light '} rounded-lg pl-4 heading-l min-h-[45px] placeholder-violet-deep placeholder:opacity-25`} type={props.type} name={props.name} id={props.name} placeholder={props.placeholder} />
+        <input value={value} onChange={onChange} ref={ref} className={`w-full flex-grow outline-none border ${props?.error?.hasError || props?.hasError ? 'border-red' : 'border-grey-light '} rounded-lg pl-4 heading-l min-h-[45px] placeholder-violet-deep placeholder:opacity-25`} type={props.type} name={props.name} id={props.name} placeholder={props.placeholder} />
       </label>
-      <p className={`${error ? 'flex' : 'hidden'}`}>{error}</p>
+      {props?.error?.hasError && <p className='body-s text-red'>{props.error.message}</p>}
     </Wrapper>
   );
 });
